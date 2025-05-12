@@ -1,0 +1,6 @@
+# IDEs directories
+.idea
+.vscode
+.zed
+
+.env
