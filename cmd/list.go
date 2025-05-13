@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/google/go-github/v52/github"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var listCmd = &cobra.Command{
@@ -15,8 +17,12 @@ var listCmd = &cobra.Command{
 		owner, repo := args[0], args[1]
 
 		client, ctx := NewGitHubClient()
+		state := viper.GetString("state")
+		opts := &github.IssueListByRepoOptions{
+			State: state,
+		}
+		issues, _, err := client.Issues.ListByRepo(ctx, owner, repo, opts)
 
-		issues, _, err := client.Issues.ListByRepo(ctx, owner, repo, nil)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error fetching issues: %v\n", err)
 			os.Exit(1)
@@ -30,4 +36,7 @@ var listCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(listCmd)
+
+	listCmd.Flags().StringP("state", "s", "open", "Filter by state: open, closed, all")
+	viper.BindPFlag("state", listCmd.Flags().Lookup("state"))
 }
