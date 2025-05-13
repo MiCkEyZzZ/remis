@@ -1,14 +1,11 @@
 package cmd
 
 import (
-	"context"
 	"fmt"
 	"os"
 
 	"github.com/google/go-github/v52/github"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
-	"golang.org/x/oauth2"
 )
 
 var createBodyFile string
@@ -20,12 +17,6 @@ var createCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		owner, repo, title := args[0], args[1], args[2]
 
-		token := viper.GetString("token")
-		if token == "" {
-			fmt.Fprintln(os.Stderr, "GitHub token required: set GITHUB_TOKEN or --token")
-			os.Exit(1)
-		}
-
 		body := ""
 		if createBodyFile != "" {
 			data, err := os.ReadFile(createBodyFile)
@@ -36,10 +27,7 @@ var createCmd = &cobra.Command{
 			body = string(data)
 		}
 
-		ctx := context.Background()
-		ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: token})
-		tc := oauth2.NewClient(ctx, ts)
-		client := github.NewClient(tc)
+		client, ctx := NewGitHubClient()
 
 		issueRequest := &github.IssueRequest{Title: &title, Body: &body}
 		issue, _, err := client.Issues.Create(ctx, owner, repo, issueRequest)

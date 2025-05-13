@@ -1,15 +1,12 @@
 package cmd
 
 import (
-	"context"
 	"fmt"
 	"os"
 	"strconv"
 
 	"github.com/google/go-github/v52/github"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
-	"golang.org/x/oauth2"
 )
 
 var commentBodyFile string
@@ -26,12 +23,6 @@ var commentCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		token := viper.GetString("token")
-		if token != "" {
-			fmt.Fprintln(os.Stderr, "GitHub token required: set GITHUB_TOKEN or --token")
-			os.Exit(1)
-		}
-
 		body := ""
 		if commentBodyFile != "" {
 			data, err := os.ReadFile(commentBodyFile)
@@ -42,10 +33,7 @@ var commentCmd = &cobra.Command{
 			body = string(data)
 		}
 
-		ctx := context.Background()
-		ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: token})
-		tc := oauth2.NewClient(ctx, ts)
-		client := github.NewClient(tc)
+		client, ctx := NewGitHubClient()
 
 		comment := &github.IssueComment{Body: &body}
 		created, _, err := client.Issues.CreateComment(ctx, owner, repo, number, comment)

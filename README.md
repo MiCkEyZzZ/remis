@@ -7,10 +7,13 @@ A tool for managing GitHub uses from the terminal.
 ```
 remis/
 ├─ cmd/
-│  ├─ root.go
-│  ├─ list.go
-│  ├─ create.go
 │  ├─ close.go
-│  └─ comment.go
+│  ├─ comment.go
+│  ├─ config.go
+│  ├─ create.go
+│  ├─ doc.go
+│  ├─ list.go
+│  ├─ root.go
+│  └─ utils.go
 └─ main.go
 ```
