@@ -55,7 +55,7 @@ var listCmd = &cobra.Command{
 
 			// Выводим список для обновления вывода.
 			w := tabwriter.NewWriter(os.Stdout, 0, 2, 2, ' ', 0)
-			fmt.Fprintln(w, "Number\tState\tTitle")
+			fmt.Fprintln(w, "Number\tState\tTitle\tDate")
 			for _, issue := range items {
 				st := issue.GetState()
 				var stCol string
@@ -67,10 +67,13 @@ var listCmd = &cobra.Command{
 					stCol = color.New(color.FgHiYellow).Sprint("🟡")
 				}
 
-				fmt.Fprintf(w, "#%d\t%s\t%s\n",
+				createdAt := issue.GetCreatedAt().Format("2006-01-02")
+
+				fmt.Fprintf(w, "#%d\t%s\t%s\t%s\n",
 					issue.GetNumber(),
 					stCol,
 					issue.GetTitle(),
+					createdAt,
 				)
 			}
 			w.Flush()
