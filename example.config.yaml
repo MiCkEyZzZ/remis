@@ -1,1 +1,4 @@
+# Take a token from GitHub. Go to `https://github.com/settings/tokens` 
+# and select: `Personal access tokens (classic)`. When you generate a
+# token, paste it below into the token variable.
 token: ghp_xxx123abc
