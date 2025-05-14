@@ -50,15 +50,21 @@ var listCmd = &cobra.Command{
 				continue
 			}
 
+			// Очистка экрана для обновления вывода.
+			fmt.Print("\033[H\033[J")
+
+			// Выводим список для обновления вывода.
 			w := tabwriter.NewWriter(os.Stdout, 0, 2, 2, ' ', 0)
 			fmt.Fprintln(w, "Number\tState\tTitle")
 			for _, issue := range items {
 				st := issue.GetState()
 				var stCol string
 				if st == "open" {
-					stCol = color.New(color.FgGreen).Sprint("● OPEN")
+					stCol = color.New(color.FgGreen).Sprint("🟢")
+				} else if st == "closed" {
+					stCol = color.New(color.FgRed).Sprint("🔴")
 				} else {
-					stCol = color.New(color.FgRed).Sprint("● CLOSED")
+					stCol = color.New(color.FgHiYellow).Sprint("🟡")
 				}
 
 				fmt.Fprintf(w, "#%d\t%s\t%s\n",
@@ -69,6 +75,7 @@ var listCmd = &cobra.Command{
 			}
 			w.Flush()
 
+			// Запрос для следующей страницы.
 			fmt.Print("\n(n = next page, p = previous page, q = quit): ")
 			var input string
 			fmt.Scanln(&input)
