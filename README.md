@@ -12,3 +12,8 @@ A tool for managing GitHub uses from the terminal.
 - [ ] Search and filtering
 - [ ] Editing issue
 - [ ] Automatic backups
+- [ ] Плагины через Go Plugins
+- [ ] Интеграция с Notion/Slack через Webhook
+- [ ] Кастомный кеш, работа с rate-limit
+- [ ] Конфигурация через .rc-файл
+- [ ] TUI-интерфейс через bubbletea
